@@ -27,7 +27,7 @@
                 <td>{{ post.content }}</td>
                 <td>{{ post.publishedAt ? post.publishedAt|date('Y-m-d') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_blog_show', {'id': post.id}) }}">show</a>
+                    <a href="{{ path('app_blog_show', {'slug': post.slug}) }}">show</a>
                     <a href="{{ path('app_blog_edit', {'id': post.id}) }}">edit</a>
                 </td>
             </tr>
