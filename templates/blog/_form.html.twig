@@ -2,6 +2,8 @@
     <div class="form-fields">
         {{ form_row(form.title, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
         {{ form_row(form.slug, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+        {{ form_row(form.author, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+        {{ form_row(form.category, {'attr': {'class': 'form-select'}, 'label_attr': {'class': 'form-label'}}) }}
         {{ form_row(form.summary, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
         {{ form_row(form.content, {'attr': {'class': 'form-textarea'}, 'label_attr': {'class': 'form-label'}}) }}
         {{ form_row(form.publishedAt, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}

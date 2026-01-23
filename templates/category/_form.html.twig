@@ -1,0 +1,6 @@
+{{ form_start(form, {'attr': {'class': 'post-form'}}) }}
+    <div class="form-fields">
+        {{ form_row(form.name, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+    </div>
+    <button type="submit" class="btn-submit">{{ button_label|default('Save Category') }}</button>
+{{ form_end(form) }}

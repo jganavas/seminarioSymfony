@@ -12,10 +12,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-#[Route('/')]
+#[Route('/blog')]
 final class BlogController extends AbstractController
 {
-    #[Route(name: 'app_blog_index', methods: ['GET'])]
+    #[Route('/', name: 'app_blog_index', methods: ['GET'])]
     public function index(PostRepository $postRepository): Response
     {
 
@@ -44,7 +44,7 @@ final class BlogController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'app_blog_show', methods: ['GET'])]
+    #[Route('/post/{slug}', name: 'app_blog_show', methods: ['GET'])]
     public function show(string $slug, PostRepository $postRepository): Response
     {
 

@@ -20,6 +20,20 @@
             <h2 class="post-detail-title">{{ post.title }}</h2>
             <p class="post-detail-slug">{{ post.slug }}</p>
             
+            {% if post.author %}
+                <div class="post-detail-section">
+                    <h3>Author</h3>
+                    <p>{{ post.author }}</p>
+                </div>
+            {% endif %}
+
+            {% if post.category %}
+                <div class="post-detail-section">
+                    <h3>Category</h3>
+                    <p class="category-badge">{{ post.category.name }}</p>
+                </div>
+            {% endif %}
+
             {% if post.summary %}
                 <div class="post-detail-section">
                     <h3>Summary</h3>

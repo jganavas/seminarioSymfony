@@ -21,13 +21,18 @@
                         <img src="{{ asset('styles/img/estrella.png') }}" alt="Logo">
                         <h1>Mi paginilla</h1>
                     </div>
-                    <nav class="main-nav">
+                    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <nav class="main-nav" id="main-nav">
                         {% block nav %}
                             <ul>
-                                <li><a href="{{ path('app_blog_index') }}">Inicio</a></li>
+                                <li><a href="{{ path('app_home') }}">Inicio</a></li>
                                 <li><a href="{{ path('app_blog_new') }}">Nuevo Post</a></li>
-                                <li><a href="#">Acerca de</a></li>
-                                <li><a href="#">Contacto</a></li>
+                                <li><a href="{{ path('app_category_index') }}">Categorías</a></li>
+                                <li><a href="{{ path('app_about') }}">Acerca de</a></li>
                             </ul>
                         {% endblock %}
                     </nav>

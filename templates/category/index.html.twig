@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+    <div class="posts-header">
+        <h1>Categories</h1>
+        <a href="{{ path('app_category_new') }}" class="btn-create">Create new category</a>
+    </div>
+
+    <div class="categories-grid">
+        {% for category in categories %}
+            <article class="category-card">
+                <div class="category-card-header">
+                    <span class="category-id">#{{ category.id }}</span>
+                    <span class="category-count">{{ category.posts|length }} posts</span>
+                </div>
+                <div class="category-card-body">
+                    <h2 class="category-name">{{ category.name }}</h2>
+                </div>
+                <div class="category-card-actions">
+                    <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn-action btn-show">Show</a>
+                    <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn-action btn-edit">Edit</a>
+                </div>
+            </article>
+        {% else %}
+            <div class="no-posts">
+                <p>No categories found</p>
+                <a href="{{ path('app_category_new') }}" class="btn-create">Create your first category</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

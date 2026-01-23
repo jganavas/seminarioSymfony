@@ -18,6 +18,12 @@
                 <div class="post-card-body">
                     <h2 class="post-title">{{ post.title }}</h2>
                     <p class="post-slug">{{ post.slug }}</p>
+                    {% if post.author %}
+                        <p class="post-author">By {{ post.author }}</p>
+                    {% endif %}
+                    {% if post.category %}
+                        <span class="post-category">{{ post.category.name }}</span>
+                    {% endif %}
                     {% if post.summary %}
                         <p class="post-summary">{{ post.summary }}</p>
                     {% endif %}

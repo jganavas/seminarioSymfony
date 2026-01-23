@@ -2,10 +2,15 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Post;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
 
 class PostType extends AbstractType
 {
@@ -14,6 +19,13 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('slug')
+            ->add('author')
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'placeholder' => 'Select a category',
+                'required' => false,
+            ])
             ->add('summary')
             ->add('content')
             ->add('publishedAt')

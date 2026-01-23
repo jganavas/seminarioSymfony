@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Acerca de - Nuestro Equipo Felino{% endblock %}
+
+{% block body %}
+    <div class="about-header">
+        <h1>🐱 Acerca de Nosotros</h1>
+        <p class="about-intro">
+            Somos una empresa única, revolucionaria y completamente felina. Fundada en 2020 durante la cuarentena, 
+            cuando nuestros fundadores decidieron que dormir 16 horas al día podía ser un modelo de negocio viable. 
+            Desde entonces, hemos demostrado que los gatos no solo dominan internet, sino también el mundo empresarial.
+        </p>
+    </div>
+
+    <div class="team-section">
+        <h2>Nuestro Equipo</h2>
+        <div class="team-grid">
+            {% for member in team %}
+                <article class="team-card">
+                    <div class="team-card-image">
+                        <img src="{{ member.image }}" alt="{{ member.name }}" onerror="this.src='https://via.placeholder.com/300x300/667eea/ffffff?text=🐱'">
+                    </div>
+                    <div class="team-card-content">
+                        <h3 class="team-member-name">{{ member.name }}</h3>
+                        <span class="team-member-position">{{ member.position }}</span>
+                        <p class="team-member-bio">{{ member.bio }}</p>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="company-values">
+        <h2>Nuestros Valores</h2>
+        <ul class="values-list">
+            <li>
+                <span class="value-icon">😴</span>
+                <strong>Descanso primero:</strong> Creemos que las mejores ideas vienen después de una buena siesta
+            </li>
+            <li>
+                <span class="value-icon">🎯</span>
+                <strong>Enfoque selectivo:</strong> Ignoramos lo que no nos interesa con gran profesionalismo
+            </li>
+            <li>
+                <span class="value-icon">🐾</span>
+                <strong>Independencia:</strong> Trabajamos cuando queremos, donde queremos
+            </li>
+            <li>
+                <span class="value-icon">📦</span>
+                <strong>Innovación:</strong> Si cabe en una caja, trabajaremos desde ahí
+            </li>
+        </ul>
+    </div>
+
+    <div class="back-link">
+        <a href="{{ path('app_blog_index') }}" class="btn-back">← Volver al inicio</a>
+    </div>
+{% endblock %}
