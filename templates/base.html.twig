@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Mi Blog{% endblock %}</title>
+        <title>{% block title %}Mi paginilla{% endblock %}</title>
         <link rel="icon" href="{{ asset('styles/img/estrella.png') }}">
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
@@ -19,7 +19,7 @@
                 <div class="header-content">
                     <div class="logo">
                         <img src="{{ asset('styles/img/estrella.png') }}" alt="Logo">
-                        <h1>Mi Blog</h1>
+                        <h1>Mi paginilla</h1>
                     </div>
                     <nav class="main-nav">
                         {% block nav %}
@@ -54,7 +54,7 @@
                         <div class="footer-section">
                             <h3>Enlaces</h3>
                             <ul>
-                                <li><a href="{{ path('app_blog_index') }}">Blog</a></li>
+                                <li><a href="{{ path('app_blog_index') }}">Miau</a></li>
                                 <li><a href="#">Política de Privacidad</a></li>
                                 <li><a href="#">Términos de Uso</a></li>
                             </ul>

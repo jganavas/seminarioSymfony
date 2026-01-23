@@ -1,4 +1,10 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'class': 'post-form'}}) }}
+    <div class="form-fields">
+        {{ form_row(form.title, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+        {{ form_row(form.slug, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+        {{ form_row(form.summary, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+        {{ form_row(form.content, {'attr': {'class': 'form-textarea'}, 'label_attr': {'class': 'form-label'}}) }}
+        {{ form_row(form.publishedAt, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+    </div>
+    <button type="submit" class="btn-submit">{{ button_label|default('Save Post') }}</button>
 {{ form_end(form) }}

@@ -1,43 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Post index{% endblock %}
+{% block title %}Mi paginilla{% endblock %}
 
 {% block body %}
-    <h1>Post index</h1>
+    <div class="posts-header">
+        <h1>Miauuu</h1>
+        <a href="{{ path('app_blog_new') }}" class="btn-create">Create new</a>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Slug</th>
-                <th>Summary</th>
-                <th>Content</th>
-                <th>PublishedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="posts-grid">
         {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.title }}</td>
-                <td>{{ post.slug }}</td>
-                <td>{{ post.summary }}</td>
-                <td>{{ post.content }}</td>
-                <td>{{ post.publishedAt ? post.publishedAt|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_blog_show', {'slug': post.slug}) }}">show</a>
-                    <a href="{{ path('app_blog_edit', {'id': post.id}) }}">edit</a>
-                </td>
-            </tr>
+            <article class="post-card">
+                <div class="post-card-header">
+                    <span class="post-id">#{{ post.id }}</span>
+                    <span class="post-date">{{ post.publishedAt ? post.publishedAt|date('Y-m-d') : 'Not published' }}</span>
+                </div>
+                <div class="post-card-body">
+                    <h2 class="post-title">{{ post.title }}</h2>
+                    <p class="post-slug">{{ post.slug }}</p>
+                    {% if post.summary %}
+                        <p class="post-summary">{{ post.summary }}</p>
+                    {% endif %}
+                    {% if post.content %}
+                        <p class="post-content">{{ post.content }}</p>
+                    {% endif %}
+                </div>
+                <div class="post-card-actions">
+                    <a href="{{ path('app_blog_show', {'slug': post.slug}) }}" class="btn-action btn-show">Show</a>
+                    <a href="{{ path('app_blog_edit', {'id': post.id}) }}" class="btn-action btn-edit">Edit</a>
+                </div>
+            </article>
         {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
+            <div class="no-posts">
+                <p>No records found</p>
+                <a href="{{ path('app_blog_new') }}" class="btn-create">Create your first post</a>
+            </div>
         {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_blog_new') }}">Create new</a>
+    </div>
 {% endblock %}

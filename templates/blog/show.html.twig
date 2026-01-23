@@ -1,42 +1,47 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Post{% endblock %}
+{% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-    <h1>Post</h1>
+    <div class="page-header">
+        <a href="{{ path('app_blog_index') }}" class="btn-back">← Back to list</a>
+        <h1>Post Details</h1>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ post.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ post.title }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ post.slug }}</td>
-            </tr>
-            <tr>
-                <th>Summary</th>
-                <td>{{ post.summary }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ post.content }}</td>
-            </tr>
-            <tr>
-                <th>PublishedAt</th>
-                <td>{{ post.publishedAt ? post.publishedAt|date('d-m-Y') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <article class="post-detail-card">
+        <div class="post-detail-header">
+            <span class="post-id">#{{ post.id }}</span>
+            <span class="post-date">
+                {{ post.publishedAt ? post.publishedAt|date('d M Y') : 'Not published' }}
+            </span>
+        </div>
 
-    <a href="{{ path('app_blog_index') }}">back to list</a>
+        <div class="post-detail-body">
+            <h2 class="post-detail-title">{{ post.title }}</h2>
+            <p class="post-detail-slug">{{ post.slug }}</p>
+            
+            {% if post.summary %}
+                <div class="post-detail-section">
+                    <h3>Summary</h3>
+                    <p>{{ post.summary }}</p>
+                </div>
+            {% endif %}
 
-    <a href="{{ path('app_blog_edit', {'id': post.id}) }}">edit</a>
+            {% if post.content %}
+                <div class="post-detail-section">
+                    <h3>Content</h3>
+                    <p>{{ post.content }}</p>
+                </div>
+            {% endif %}
+        </div>
 
-    {{ include('blog/_delete_form.html.twig') }}
+        <div class="post-detail-actions">
+            <a href="{{ path('app_blog_edit', {'id': post.id}) }}" class="btn-action btn-edit">
+                Edit Post
+            </a>
+            <div class="delete-wrapper">
+                {{ include('blog/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </article>
 {% endblock %}

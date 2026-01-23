@@ -3,11 +3,18 @@
 {% block title %}Edit Post{% endblock %}
 
 {% block body %}
-    <h1>Edit Post</h1>
+    <div class="page-header">
+        <a href="{{ path('app_blog_index') }}" class="btn-back">← Back to list</a>
+        <h1>Edit Post</h1>
+    </div>
 
-    {{ include('blog/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="form-card">
+        {{ include('blog/_form.html.twig', {'button_label': 'Update Post'}) }}
+    </div>
 
-    <a href="{{ path('app_blog_index') }}">back to list</a>
-
-    {{ include('blog/_delete_form.html.twig') }}
+    <div class="danger-zone">
+        <h3>Danger Zone</h3>
+        <p>Once you delete a post, there is no going back. Please be certain.</p>
+        {{ include('blog/_delete_form.html.twig') }}
+    </div>
 {% endblock %}
