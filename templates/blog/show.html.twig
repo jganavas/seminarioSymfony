@@ -3,59 +3,73 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-    <div class="page-header">
-        <a href="{{ path('app_blog_index') }}" class="btn-back">← Back to list</a>
-        <h1>Post Details</h1>
-    </div>
-
-    <article class="post-detail-card">
-        <div class="post-detail-header">
-            <span class="post-id">#{{ post.id }}</span>
-            <span class="post-date">
-                {{ post.publishedAt ? post.publishedAt|date('d M Y') : 'Not published' }}
-            </span>
-        </div>
-
-        <div class="post-detail-body">
-            <h2 class="post-detail-title">{{ post.title }}</h2>
-            <p class="post-detail-slug">{{ post.slug }}</p>
-            
-            {% if post.author %}
-                <div class="post-detail-section">
-                    <h3>Author</h3>
-                    <p>{{ post.author }}</p>
-                </div>
-            {% endif %}
-
-            {% if post.category %}
-                <div class="post-detail-section">
-                    <h3>Category</h3>
-                    <p class="category-badge">{{ post.category.name }}</p>
-                </div>
-            {% endif %}
-
-            {% if post.summary %}
-                <div class="post-detail-section">
-                    <h3>Summary</h3>
-                    <p>{{ post.summary }}</p>
-                </div>
-            {% endif %}
-
-            {% if post.content %}
-                <div class="post-detail-section">
-                    <h3>Content</h3>
-                    <p>{{ post.content }}</p>
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="post-detail-actions">
-            <a href="{{ path('app_blog_edit', {'id': post.id}) }}" class="btn-action btn-edit">
-                Edit Post
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <a href="{{ path('app_blog_index') }}" class="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to list
             </a>
-            <div class="delete-wrapper">
-                {{ include('blog/_delete_form.html.twig') }}
-            </div>
+            <h1 class="text-3xl font-bold text-gray-800">Post Details</h1>
         </div>
-    </article>
+
+        <article class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-700 px-8 py-6 flex justify-between items-center">
+                <span class="bg-white text-purple-700 px-4 py-2 rounded-full text-sm font-bold">#{{ post.id }}</span>
+                <span class="text-white text-sm">
+                    {{ post.publishedAt ? post.publishedAt|date('d M Y, H:i') : 'Not published' }}
+                </span>
+            </div>
+
+            <div class="p-8">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">{{ post.title }}</h2>
+                <p class="text-purple-600 font-medium text-lg mb-8">{{ post.slug }}</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    {% if post.author %}
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Author</h3>
+                            <p class="text-gray-900 font-medium text-lg">{{ post.author }}</p>
+                        </div>
+                    {% endif %}
+
+                    {% if post.category %}
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">Category</h3>
+                            <span class="inline-block bg-purple-100 text-purple-700 px-4 py-2 rounded-full font-medium">{{ post.category.name }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if post.summary %}
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Summary</h3>
+                        <p class="text-gray-700 text-lg leading-relaxed bg-purple-50 p-6 rounded-lg border-l-4 border-purple-500">{{ post.summary }}</p>
+                    </div>
+                {% endif %}
+
+                {% if post.content %}
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Content</h3>
+                        <div class="prose max-w-none text-gray-700 leading-relaxed">
+                            <p>{{ post.content }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="border-t border-gray-200 px-8 py-6 bg-gray-50 flex justify-between items-center">
+                <a href="{{ path('app_blog_edit', {'id': post.id}) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    Edit Post
+                </a>
+                <div>
+                    {{ include('blog/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </article>
+    </div>
 {% endblock %}

@@ -3,56 +3,75 @@
 {% block title %}Acerca de - Nuestro Equipo Felino{% endblock %}
 
 {% block body %}
-    <div class="about-header">
-        <h1>🐱 Acerca de Nosotros</h1>
-        <p class="about-intro">
-            Somos una empresa única, revolucionaria y completamente felina. Fundada en 2020 durante la cuarentena, 
-            cuando nuestros fundadores decidieron que dormir 16 horas al día podía ser un modelo de negocio viable. 
-            Desde entonces, hemos demostrado que los gatos no solo dominan internet, sino también el mundo empresarial.
-        </p>
-    </div>
-
-    <div class="team-section">
-        <h2>Nuestro Equipo</h2>
-        <div class="team-grid">
-            {% for member in team %}
-                <article class="team-card">
-                    <div class="team-card-image">
-                        <img src="{{ member.image }}" alt="{{ member.name }}" onerror="this.src='https://via.placeholder.com/300x300/667eea/ffffff?text=🐱'">
-                    </div>
-                    <div class="team-card-content">
-                        <h3 class="team-member-name">{{ member.name }}</h3>
-                        <span class="team-member-position">{{ member.position }}</span>
-                        <p class="team-member-bio">{{ member.bio }}</p>
-                    </div>
-                </article>
-            {% endfor %}
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <h1 class="text-5xl font-bold text-gray-900 mb-6">🐱 Acerca de Nosotros</h1>
+            <p class="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+                Somos una empresa única, revolucionaria y completamente felina. Fundada en 2020 durante la cuarentena, 
+                cuando nuestros fundadores decidieron que dormir 16 horas al día podía ser un modelo de negocio viable. 
+                Desde entonces, hemos demostrado que los gatos no solo dominan internet, sino también el mundo empresarial.
+            </p>
         </div>
-    </div>
 
-    <div class="company-values">
-        <h2>Nuestros Valores</h2>
-        <ul class="values-list">
-            <li>
-                <span class="value-icon">😴</span>
-                <strong>Descanso primero:</strong> Creemos que las mejores ideas vienen después de una buena siesta
-            </li>
-            <li>
-                <span class="value-icon">🎯</span>
-                <strong>Enfoque selectivo:</strong> Ignoramos lo que no nos interesa con gran profesionalismo
-            </li>
-            <li>
-                <span class="value-icon">🐾</span>
-                <strong>Independencia:</strong> Trabajamos cuando queremos, donde queremos
-            </li>
-            <li>
-                <span class="value-icon">📦</span>
-                <strong>Innovación:</strong> Si cabe en una caja, trabajaremos desde ahí
-            </li>
-        </ul>
-    </div>
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Nuestro Equipo</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {% for member in team %}
+                    <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                        <div class="h-64 overflow-hidden bg-gradient-to-br from-purple-400 to-purple-600">
+                            <img src="{{ member.image }}" alt="{{ member.name }}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x300/667eea/ffffff?text=🐱'">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ member.name }}</h3>
+                            <span class="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-medium mb-4">{{ member.position }}</span>
+                            <p class="text-gray-700 leading-relaxed">{{ member.bio }}</p>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
 
-    <div class="back-link">
-        <a href="{{ path('app_blog_index') }}" class="btn-back">← Volver al inicio</a>
+        <div class="bg-gradient-to-r from-purple-500 to-purple-700 rounded-2xl p-12 text-white mb-12">
+            <h2 class="text-3xl font-bold mb-8 text-center">Nuestros Valores</h2>
+            <ul class="space-y-6 max-w-3xl mx-auto">
+                <li class="flex items-start bg-white/10 backdrop-blur rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <span class="text-4xl mr-4">😴</span>
+                    <div>
+                        <strong class="text-xl block mb-2">Descanso primero</strong>
+                        <p class="text-purple-100">Creemos que las mejores ideas vienen después de una buena siesta</p>
+                    </div>
+                </li>
+                <li class="flex items-start bg-white/10 backdrop-blur rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <span class="text-4xl mr-4">🎯</span>
+                    <div>
+                        <strong class="text-xl block mb-2">Enfoque selectivo</strong>
+                        <p class="text-purple-100">Ignoramos lo que no nos interesa con gran profesionalismo</p>
+                    </div>
+                </li>
+                <li class="flex items-start bg-white/10 backdrop-blur rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <span class="text-4xl mr-4">🐾</span>
+                    <div>
+                        <strong class="text-xl block mb-2">Independencia</strong>
+                        <p class="text-purple-100">Trabajamos cuando queremos, donde queremos</p>
+                    </div>
+                </li>
+                <li class="flex items-start bg-white/10 backdrop-blur rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <span class="text-4xl mr-4">📦</span>
+                    <div>
+                        <strong class="text-xl block mb-2">Innovación</strong>
+                        <p class="text-purple-100">Si cabe en una caja, trabajaremos desde ahí</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="text-center">
+            <a href="{{ path('app_blog_index') }}" class="inline-flex items-center text-purple-600 hover:text-purple-700 font-semibold text-lg transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Volver al inicio
+            </a>
+        </div>
     </div>
 {% endblock %}

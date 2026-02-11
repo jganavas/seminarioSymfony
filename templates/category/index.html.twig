@@ -3,30 +3,30 @@
 {% block title %}Categories{% endblock %}
 
 {% block body %}
-    <div class="posts-header">
-        <h1>Categories</h1>
-        <a href="{{ path('app_category_new') }}" class="btn-create">Create new category</a>
+    <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+        <h1 class="text-4xl font-bold text-gray-800">Categories</h1>
+        <a href="{{ path('app_category_new') }}" class="btn-primary">Create new category</a>
     </div>
 
-    <div class="categories-grid">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {% for category in categories %}
-            <article class="category-card">
-                <div class="category-card-header">
-                    <span class="category-id">#{{ category.id }}</span>
-                    <span class="category-count">{{ category.posts|length }} posts</span>
+            <article class="card group">
+                <div class="flex justify-between items-center pb-4 border-b-2 border-gray-100">
+                    <span class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-semibold">#{{ category.id }}</span>
+                    <span class="text-gray-500 text-sm font-medium">{{ category.posts|length }} posts</span>
                 </div>
-                <div class="category-card-body">
-                    <h2 class="category-name">{{ category.name }}</h2>
+                <div class="flex-1 flex flex-col gap-2 my-4">
+                    <h2 class="text-2xl font-bold text-gray-800 group-hover:text-purple-600 transition-colors">{{ category.name }}</h2>
                 </div>
-                <div class="category-card-actions">
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn-action btn-show">Show</a>
-                    <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn-action btn-edit">Edit</a>
+                <div class="flex gap-3 pt-4 border-t border-gray-100">
+                    <a href="{{ path('app_category_show', {'id': category.id}) }}" class="flex-1 text-center bg-purple-100 text-purple-700 px-4 py-2 rounded-lg font-medium hover:bg-purple-200 transition-all">Show</a>
+                    <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="flex-1 text-center bg-blue-100 text-blue-700 px-4 py-2 rounded-lg font-medium hover:bg-blue-200 transition-all">Edit</a>
                 </div>
             </article>
         {% else %}
-            <div class="no-posts">
-                <p>No categories found</p>
-                <a href="{{ path('app_category_new') }}" class="btn-create">Create your first category</a>
+            <div class="col-span-full text-center py-16">
+                <p class="text-xl text-gray-500 mb-6">No categories found</p>
+                <a href="{{ path('app_category_new') }}" class="btn-primary">Create your first category</a>
             </div>
         {% endfor %}
     </div>

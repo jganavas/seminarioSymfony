@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Iniciar Sesión - Mi paginilla{% endblock %}
+
+{% block body %}
+    <div class="max-w-md mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="text-6xl mb-4">🐱</div>
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">Bienvenido de Vuelta</h1>
+            <p class="text-gray-600">Inicia sesión para continuar</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% if error %}
+            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                    <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-6 rounded-lg" role="alert">
+                <div class="flex items-center justify-between">
+                    <span>Ya has iniciado sesión como <strong>{{ app.user.userIdentifier }}</strong></span>
+                    <a href="{{ path('app_logout') }}" class="text-blue-800 hover:text-blue-900 font-semibold ml-4">Cerrar Sesión</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Login Form Card -->
+        <div class="card">
+            <form method="post" class="space-y-6">
+                <!-- Email -->
+                <div>
+                    <label for="username" class="label">Email</label>
+                    <input 
+                        type="email" 
+                        value="{{ last_username }}" 
+                        name="_username" 
+                        id="username" 
+                        class="input-field" 
+                        autocomplete="email" 
+                        placeholder="tu@email.com"
+                        required 
+                        autofocus
+                    >
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="label">Contraseña</label>
+                    <input 
+                        type="password" 
+                        name="_password" 
+                        id="password" 
+                        class="input-field" 
+                        autocomplete="current-password"
+                        placeholder="Tu contraseña"
+                        required
+                    >
+                </div>
+
+                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+
+                <!-- Remember Me -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input 
+                            type="checkbox" 
+                            name="_remember_me" 
+                            id="_remember_me"
+                            class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
+                        >
+                        <label for="_remember_me" class="ml-2 text-sm text-gray-700">Recordarme</label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#" class="text-purple-600 hover:text-purple-800">¿Olvidaste tu contraseña?</a>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit" class="btn-primary w-full">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                        </svg>
+                        Iniciar Sesión
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Register Link -->
+        <div class="text-center mt-6">
+            <p class="text-gray-600">
+                ¿No tienes cuenta? 
+                <a href="{{ path('app_register') }}" class="text-purple-600 hover:text-purple-800 font-semibold">Regístrate Aquí</a>
+            </p>
+        </div>
+    </div>
+{% endblock %}

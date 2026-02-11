@@ -3,44 +3,66 @@
 {% block title %}{{ category.name }}{% endblock %}
 
 {% block body %}
-    <div class="page-header">
-        <a href="{{ path('app_category_index') }}" class="btn-back">← Back to list</a>
-        <h1>Category Details</h1>
-    </div>
-
-    <article class="post-detail-card">
-        <div class="post-detail-header">
-            <span class="post-id">#{{ category.id }}</span>
-            <span class="post-date">{{ category.posts|length }} posts</span>
-        </div>
-
-        <div class="post-detail-body">
-            <h2 class="post-detail-title">{{ category.name }}</h2>
-            
-            {% if category.posts|length > 0 %}
-                <div class="post-detail-section">
-                    <h3>Posts in this category</h3>
-                    <ul class="category-posts-list">
-                        {% for post in category.posts %}
-                            <li>
-                                <a href="{{ path('app_blog_show', {'slug': post.slug}) }}">{{ post.title }}</a>
-                                <span class="post-meta">by {{ post.author ?? 'Unknown' }}</span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            {% else %}
-                <p class="no-posts-message">No posts in this category yet.</p>
-            {% endif %}
-        </div>
-
-        <div class="post-detail-actions">
-            <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn-action btn-edit">
-                Edit Category
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <a href="{{ path('app_category_index') }}" class="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Back to list
             </a>
-            <div class="delete-wrapper">
-                {{ include('category/_delete_form.html.twig') }}
-            </div>
+            <h1 class="text-3xl font-bold text-gray-800">Category Details</h1>
         </div>
-    </article>
+
+        <article class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-700 px-8 py-6 flex justify-between items-center">
+                <span class="bg-white text-purple-700 px-4 py-2 rounded-full text-sm font-bold">#{{ category.id }}</span>
+                <span class="text-white text-sm font-medium">{{ category.posts|length }} posts</span>
+            </div>
+
+            <div class="p-8">
+                <h2 class="text-4xl font-bold text-gray-900 mb-8">{{ category.name }}</h2>
+                
+                {% if category.posts|length > 0 %}
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                            <svg class="w-6 h-6 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Posts in this category
+                        </h3>
+                        <ul class="space-y-3">
+                            {% for post in category.posts %}
+                                <li class="bg-gray-50 hover:bg-purple-50 rounded-lg p-4 transition-all">
+                                    <a href="{{ path('app_blog_show', {'slug': post.slug}) }}" class="text-purple-600 hover:text-purple-700 font-semibold text-lg">
+                                        {{ post.title }}
+                                    </a>
+                                    <span class="block text-gray-600 text-sm mt-1">by {{ post.author ?? 'Unknown' }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="text-center py-12">
+                        <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <p class="text-gray-500 text-lg">No posts in this category yet.</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="border-t border-gray-200 px-8 py-6 bg-gray-50 flex justify-between items-center">
+                <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                    Edit Category
+                </a>
+                <div>
+                    {{ include('category/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </article>
+    </div>
 {% endblock %}

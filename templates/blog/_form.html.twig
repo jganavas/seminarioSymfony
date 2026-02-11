@@ -1,12 +1,54 @@
-{{ form_start(form, {'attr': {'class': 'post-form'}}) }}
-    <div class="form-fields">
-        {{ form_row(form.title, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
-        {{ form_row(form.slug, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
-        {{ form_row(form.author, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
-        {{ form_row(form.category, {'attr': {'class': 'form-select'}, 'label_attr': {'class': 'form-label'}}) }}
-        {{ form_row(form.summary, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
-        {{ form_row(form.content, {'attr': {'class': 'form-textarea'}, 'label_attr': {'class': 'form-label'}}) }}
-        {{ form_row(form.publishedAt, {'attr': {'class': 'form-input'}, 'label_attr': {'class': 'form-label'}}) }}
+{{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+    <div class="space-y-6">
+        <div>
+            {{ form_label(form.title, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.title, {'attr': {'class': 'input-field'}}) }}
+            {{ form_errors(form.title) }}
+        </div>
+        
+        <div>
+            {{ form_label(form.slug, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.slug, {'attr': {'class': 'input-field'}}) }}
+            {{ form_errors(form.slug) }}
+        </div>
+        
+        <div>
+            {{ form_label(form.author, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.author, {'attr': {'class': 'input-field'}}) }}
+            {{ form_errors(form.author) }}
+        </div>
+        
+        <div>
+            {{ form_label(form.category, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.category, {'attr': {'class': 'input-field'}}) }}
+            {{ form_errors(form.category) }}
+        </div>
+        
+        <div>
+            {{ form_label(form.summary, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.summary, {'attr': {'class': 'input-field'}}) }}
+            {{ form_errors(form.summary) }}
+        </div>
+        
+        <div>
+            {{ form_label(form.content, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.content, {'attr': {'class': 'input-field min-h-[200px]'}}) }}
+            {{ form_errors(form.content) }}
+        </div>
+        
+        <div>
+            {{ form_label(form.publishedAt, null, {'label_attr': {'class': 'label'}}) }}
+            {{ form_widget(form.publishedAt, {'attr': {'class': 'input-field'}}) }}
+            {{ form_errors(form.publishedAt) }}
+        </div>
     </div>
-    <button type="submit" class="btn-submit">{{ button_label|default('Save Post') }}</button>
+    
+    <div class="flex justify-end pt-6">
+        <button type="submit" class="btn-primary">
+            <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            {{ button_label|default('Save Post') }}
+        </button>
+    </div>
 {{ form_end(form) }}
