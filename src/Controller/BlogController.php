@@ -11,8 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/blog')]
+#[Route('/admin')]
+#[IsGranted('ROLE_USER')]
 final class BlogController extends AbstractController
 {
     #[Route('/', name: 'app_blog_index', methods: ['GET'])]
@@ -20,7 +22,7 @@ final class BlogController extends AbstractController
     {
 
         return $this->render('blog/index.html.twig', [
-            'posts' => $postRepository->findAll(),
+            'posts' => $postRepository->findBy([], ['id' => 'ASC']),
         ]);
     }
 

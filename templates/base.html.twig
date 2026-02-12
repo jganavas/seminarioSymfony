@@ -5,8 +5,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{% block title %}Mi paginilla{% endblock %}</title>
         <link rel="icon" href="{{ asset('styles/img/estrella.png') }}">
+        
         {% block stylesheets %}
-            <link rel="stylesheet" href="{{ asset('styles/output.css') }}">
+            <link rel="stylesheet" href="{{ asset('styles/output.css') }}?v={{ 'now'|date('U') }}">
         {% endblock %}
 
         {% block javascripts %}
@@ -92,31 +93,36 @@
             });
         </script>
     </head>
-    <body class="bg-gray-50 min-h-screen flex flex-col">
-        <header class="bg-white shadow-md sticky top-0 z-50">
+    <body class="bg-gray-50 dark:bg-gray-900 min-h-screen flex flex-col transition-colors duration-200">
+        <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-200">
             <div class="container mx-auto px-4">
                 <div class="flex items-center justify-between py-4">
                     <div class="flex items-center gap-3">
                         <img src="{{ asset('styles/img/estrella.png') }}" alt="Logo" class="w-10 h-10">
-                        <h1 class="text-2xl font-bold text-gray-800">Mi paginilla</h1>
+                        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Mi paginilla</h1>
                     </div>
-                    <button class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-all" id="hamburger" aria-label="Toggle menu">
-                        <div class="w-6 h-5 relative flex flex-col justify-between">
-                            <span class="hamburger-line block w-full h-0.5 bg-gray-800 transition-all duration-300 ease-in-out"></span>
-                            <span class="hamburger-line block w-full h-0.5 bg-gray-800 transition-all duration-300 ease-in-out"></span>
-                            <span class="hamburger-line block w-full h-0.5 bg-gray-800 transition-all duration-300 ease-in-out"></span>
-                        </div>
-                    </button>
-                    <nav class="hidden md:flex items-center" id="main-nav">
+                    
+                    <!-- Desktop Navigation -->
+                    <nav class="hidden md:flex items-center gap-2" id="main-nav">
                         {% block nav %}
-                            <ul class="flex gap-6 items-center">
-                                <li><a href="{{ path('app_home') }}" class="text-gray-700 hover:text-purple-600 font-medium transition-colors">Inicio</a></li>
-                                <li><a href="{{ path('app_blog_new') }}" class="text-gray-700 hover:text-purple-600 font-medium transition-colors">Nuevo Post</a></li>
-                                <li><a href="{{ path('app_category_index') }}" class="text-gray-700 hover:text-purple-600 font-medium transition-colors">Categorías</a></li>
-                                <li><a href="{{ path('app_about') }}" class="text-gray-700 hover:text-purple-600 font-medium transition-colors">Acerca de</a></li>
+                            <ul class="flex gap-4 items-center">
+                                <li><a href="{{ path('app_home') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Inicio</a></li>
+                                <li><a href="{{ path('app_blog_new') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Nuevo Post</a></li>
+                                <li><a href="{{ path('app_category_index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Categorías</a></li>
+                                <li><a href="{{ path('app_about') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Acerca de</a></li>
+                                <li>
+                                    <button 
+                                        data-controller="theme"
+                                        data-action="click->theme#toggle"
+                                        class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                                        title="Cambiar tema"
+                                    >
+                                        🌓
+                                    </button>
+                                </li>
                                 {% if app.user %}
-                                    <li class="ml-4 pl-4 border-l border-gray-300">
-                                        <span class="text-gray-600 text-sm mr-3">🐱 {{ app.user.firstName }}</span>
+                                    <li class="ml-4 pl-4 border-l border-gray-300 dark:border-gray-600">
+                                        <span class="text-gray-600 dark:text-gray-400 text-sm mr-3">🐱 {{ app.user.firstName }}</span>
                                         <a href="{{ path('app_logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -125,22 +131,43 @@
                                         </a>
                                     </li>
                                 {% else %}
-                                    <li class="ml-4 pl-4 border-l border-gray-300">
-                                        <a href="{{ path('app_login') }}" class="text-purple-600 hover:text-purple-800 font-medium mr-3">Iniciar Sesión</a>
+                                    <li class="ml-4 pl-4 border-l border-gray-300 dark:border-gray-600">
+                                        <a href="{{ path('app_login') }}" class="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium mr-3">Iniciar Sesión</a>
                                         <a href="{{ path('app_register') }}" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">Registrarse</a>
                                     </li>
                                 {% endif %}
                             </ul>
                         {% endblock %}
                     </nav>
+                    
+                    <!-- Mobile buttons -->
+                    <div class="flex md:hidden items-center gap-2">
+                        <!-- Theme Toggle Button (Mobile) -->
+                        <button 
+                            data-controller="theme"
+                            data-action="click->theme#toggle"
+                            class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                            title="Cambiar tema"
+                        >
+                            🌓
+                        </button>
+                        
+                        <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" id="hamburger" aria-label="Toggle menu">
+                            <div class="w-6 h-5 relative flex flex-col justify-between">
+                                <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out"></span>
+                                <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out"></span>
+                                <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out"></span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
                 <!-- Mobile menu -->
                 <div class="hidden overflow-hidden transition-all duration-300 ease-in-out" id="mobile-menu">
-                    <ul class="py-4 space-y-1 border-t border-gray-200 mt-2">
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 50ms"><a href="{{ path('app_home') }}" class="block py-3 px-4 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-all rounded-lg">Inicio</a></li>
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 100ms"><a href="{{ path('app_blog_new') }}" class="block py-3 px-4 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-all rounded-lg">Nuevo Post</a></li>
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 150ms"><a href="{{ path('app_category_index') }}" class="block py-3 px-4 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-all rounded-lg">Categorías</a></li>
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 200ms"><a href="{{ path('app_about') }}" class="block py-3 px-4 text-gray-700 hover:bg-purple-50 hover:text-purple-600 font-medium transition-all rounded-lg">Acerca de</a></li>
+                    <ul class="py-4 space-y-1 border-t border-gray-200 dark:border-gray-700 mt-2">
+                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 50ms"><a href="{{ path('app_home') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Inicio</a></li>
+                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 100ms"><a href="{{ path('app_blog_new') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Nuevo Post</a></li>
+                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 150ms"><a href="{{ path('app_category_index') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Categorías</a></li>
+                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 200ms"><a href="{{ path('app_about') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Acerca de</a></li>
                         {% if app.user %}
                             <li class="mobile-menu-item transform transition-all duration-300 pt-2 mt-2 border-t border-gray-200" style="transition-delay: 250ms">
                                 <div class="px-4 py-2 text-gray-600 text-sm">🐱 {{ app.user.fullName }}</div>
@@ -172,7 +199,7 @@
             {% endblock %}
         </main>
 
-        <footer class="bg-gray-800 text-white mt-auto">
+        <footer class="bg-gray-800 dark:bg-gray-950 text-white mt-auto transition-colors duration-200">
             <div class="container mx-auto px-4">
                 {% block footer %}
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-12">

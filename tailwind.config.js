@@ -1,8 +1,9 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
+  darkMode: 'selector',
   content: [
     "./assets/**/*.js",
-    "./templates/**/*.html.twig",
+    "./templates/**/*.{html,twig}",
   ],
   theme: {
     extend: {},

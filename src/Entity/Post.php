@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PostRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,11 +31,20 @@ class Post
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $publishedAt = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $author = null;
-
     #[ORM\ManyToOne(inversedBy: 'posts')]
-    private ?Category $category = null;
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $author = null;
+
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts')]
+    private Collection $categories;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -100,26 +111,38 @@ class Post
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    public function setAuthor(?string $author): static
+    public function setAuthor(?User $author): static
     {
         $this->author = $author;
 
         return $this;
     }
 
-    public function getCategory(): ?Category
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
     {
-        return $this->category;
+        return $this->categories;
     }
 
-    public function setCategory(?Category $category): static
+    public function addCategory(Category $category): static
     {
-        $this->category = $category;
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): static
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }

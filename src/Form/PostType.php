@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Post;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,11 +20,17 @@ class PostType extends AbstractType
         $builder
             ->add('title')
             ->add('slug')
-            ->add('author')
-            ->add('category', EntityType::class, [
+            ->add('author', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'fullName',
+                'placeholder' => 'Select an author',
+                'required' => false,
+            ])
+            ->add('categories', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Select a category',
+                'multiple' => true,
+                'expanded' => true,
                 'required' => false,
             ])
             ->add('summary')

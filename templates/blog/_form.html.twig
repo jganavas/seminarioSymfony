@@ -19,9 +19,11 @@
         </div>
         
         <div>
-            {{ form_label(form.category, null, {'label_attr': {'class': 'label'}}) }}
-            {{ form_widget(form.category, {'attr': {'class': 'input-field'}}) }}
-            {{ form_errors(form.category) }}
+            {{ form_label(form.categories, 'Categorías', {'label_attr': {'class': 'label'}}) }}
+            <div class="space-y-2 mt-2">
+                {{ form_widget(form.categories, {'attr': {'class': 'flex flex-col gap-2'}}) }}
+            </div>
+            {{ form_errors(form.categories) }}
         </div>
         
         <div>
