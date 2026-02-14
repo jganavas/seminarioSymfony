@@ -1,40 +1,57 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
+    static targets = ["icon"];
+
     connect() {
-        console.log('Theme controller connected');
-        // Aplicar tema guardado al conectar
-        const theme = localStorage.getItem('theme') || 'light';
+        // Obtener tema: 1) localStorage (preferencia manual), 2) sistema, 3) fallback a 'light'
+        const savedTheme = localStorage.getItem("theme");
+        const theme = savedTheme || this.getSystemPreference();
         this.setTheme(theme);
     }
 
     toggle() {
-        const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        const currentTheme = document.documentElement.classList.contains("dark")
+            ? "dark"
+            : "light";
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
         this.setTheme(newTheme);
     }
 
     setTheme(theme) {
-        const main = document.querySelector('main');
-        const header = document.querySelector('header');
-        
-        if (theme === 'dark') {
-            document.documentElement.classList.add('dark');
-            document.documentElement.style.backgroundColor = '#111827';
-            document.body.style.backgroundColor = '#111827';
-            if (main) main.style.backgroundColor = '#111827';
-            if (header) header.style.backgroundColor = '#1f2937'; // gray-800
-            document.title = '🌙 Modo Oscuro - Mi paginilla';
+        // Aplicar o remover clase 'dark' al elemento html
+        if (theme === "dark") {
+            document.documentElement.classList.add("dark");
         } else {
-            document.documentElement.classList.remove('dark');
-            document.documentElement.style.backgroundColor = '#f9fafb';
-            document.body.style.backgroundColor = '#f9fafb';
-            if (main) main.style.backgroundColor = '#f9fafb';
-            if (header) header.style.backgroundColor = '#ffffff'; // white
-            document.title = '☀️ Modo Claro - Mi paginilla';
+            document.documentElement.classList.remove("dark");
         }
-        localStorage.setItem('theme', theme);
-        console.log('Theme set to:', theme);
-        console.log('HTML classes:', document.documentElement.className);
+
+        // Guardar preferencia en localStorage
+        localStorage.setItem("theme", theme);
+
+        // Actualizar icono del botón
+        this.updateIcon(theme);
+    }
+
+    updateIcon(theme) {
+        // Si hay targets de icono disponibles, actualizarlos
+        if (this.hasIconTarget) {
+            this.iconTargets.forEach((icon) => {
+                // ☀️ en modo oscuro (indica "cambiar a claro")
+                // 🌙 en modo claro (indica "cambiar a oscuro")
+                icon.textContent = theme === "dark" ? "☀️" : "🌙";
+            });
+        }
+    }
+
+    getSystemPreference() {
+        // Detectar preferencia del sistema operativo
+        if (
+            window.matchMedia &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+        ) {
+            return "dark";
+        }
+        return "light";
     }
 }

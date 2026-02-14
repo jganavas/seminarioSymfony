@@ -116,8 +116,9 @@
                                         data-action="click->theme#toggle"
                                         class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
                                         title="Cambiar tema"
+                                        aria-label="Cambiar tema"
                                     >
-                                        🌓
+                                        <span data-theme-target="icon">🌙</span>
                                     </button>
                                 </li>
                                 {% if app.user %}
@@ -148,8 +149,9 @@
                             data-action="click->theme#toggle"
                             class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
                             title="Cambiar tema"
+                            aria-label="Cambiar tema"
                         >
-                            🌓
+                            <span data-theme-target="icon">🌙</span>
                         </button>
                         
                         <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" id="hamburger" aria-label="Toggle menu">

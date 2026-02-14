@@ -3,109 +3,163 @@
 {% block title %}Registro - Mi paginilla{% endblock %}
 
 {% block body %}
-    <div class="max-w-md mx-auto">
-        <!-- Header -->
-        <div class="text-center mb-8">
-            <div class="text-6xl mb-4">🐱</div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-2">Únete a la Comunidad</h1>
-            <p class="text-gray-600">Crea tu cuenta y empieza a publicar</p>
-        </div>
-
-        <!-- Flash Messages -->
-        {% for flash_error in app.flashes('verify_email_error') %}
-            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-lg" role="alert">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
-                    <span>{{ flash_error }}</span>
-                </div>
+    <div class="min-h-[80vh] flex items-center justify-center py-12 px-4">
+        <div class="max-w-md w-full">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="text-7xl mb-4 animate-bounce">🐱</div>
+                <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-50 mb-2">Únete a la Comunidad</h1>
+                <p class="text-gray-600 dark:text-gray-400">Crea tu cuenta y empieza a publicar contenido felino</p>
             </div>
-        {% endfor %}
 
-        {% for message in app.flashes('success') %}
-            <div class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-lg" role="alert">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <span>{{ message }}</span>
-                </div>
-            </div>
-        {% endfor %}
-
-        <!-- Registration Form Card -->
-        <div class="card">
-            {{ form_start(registrationForm, {'attr': {'class': 'space-y-6'}}) }}
-                
-                <!-- Form Errors -->
-                {% if form_errors(registrationForm) %}
-                    <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg">
-                        {{ form_errors(registrationForm) }}
-                    </div>
-                {% endif %}
-
-                <!-- First Name -->
-                <div>
-                    {{ form_label(registrationForm.firstName, null, {'label_attr': {'class': 'label'}}) }}
-                    {{ form_widget(registrationForm.firstName) }}
-                    {{ form_errors(registrationForm.firstName) }}
-                </div>
-
-                <!-- Last Name -->
-                <div>
-                    {{ form_label(registrationForm.lastName, null, {'label_attr': {'class': 'label'}}) }}
-                    {{ form_widget(registrationForm.lastName) }}
-                    {{ form_errors(registrationForm.lastName) }}
-                </div>
-
-                <!-- Email -->
-                <div>
-                    {{ form_label(registrationForm.email, null, {'label_attr': {'class': 'label'}}) }}
-                    {{ form_widget(registrationForm.email) }}
-                    {{ form_errors(registrationForm.email) }}
-                </div>
-
-                <!-- Password -->
-                <div>
-                    {{ form_label(registrationForm.plainPassword, null, {'label_attr': {'class': 'label'}}) }}
-                    {{ form_widget(registrationForm.plainPassword) }}
-                    <p class="text-sm text-gray-500 mt-1">
-                        Debe contener al menos 8 caracteres, una mayúscula, una minúscula y un número
-                    </p>
-                    {{ form_errors(registrationForm.plainPassword) }}
-                </div>
-
-                <!-- Terms and Conditions -->
-                <div class="flex items-start">
-                    <div class="flex items-center h-5">
-                        {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500'}}) }}
-                    </div>
-                    <div class="ml-3 text-sm">
-                        {{ form_label(registrationForm.agreeTerms, null, {'label_attr': {'class': 'text-gray-700'}}) }}
-                        {{ form_errors(registrationForm.agreeTerms) }}
-                    </div>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="pt-4">
-                    <button type="submit" class="btn-primary w-full">
-                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+            <!-- Flash Messages -->
+            {% for flash_error in app.flashes('verify_email_error') %}
+                <div class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 dark:border-red-400 text-red-700 dark:text-red-300 p-4 mb-6 rounded-lg backdrop-blur-sm" role="alert">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
                         </svg>
-                        Crear Cuenta
-                    </button>
+                        <span>{{ flash_error }}</span>
+                    </div>
                 </div>
+            {% endfor %}
 
-            {{ form_end(registrationForm) }}
-        </div>
+            {% for message in app.flashes('success') %}
+                <div class="bg-green-50 dark:bg-green-900/30 border-l-4 border-green-500 dark:border-green-400 text-green-700 dark:text-green-300 p-4 mb-6 rounded-lg backdrop-blur-sm" role="alert">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span>{{ message }}</span>
+                    </div>
+                </div>
+            {% endfor %}
 
-        <!-- Login Link -->
-        <div class="text-center mt-6">
-            <p class="text-gray-600">
-                ¿Ya tienes cuenta? 
-                <a href="#" class="text-purple-600 hover:text-purple-800 font-semibold">Inicia Sesión</a>
-            </p>
+            <!-- Registration Form Card -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl dark:shadow-purple-900/20 p-8 border border-gray-100 dark:border-gray-700">
+                {{ form_start(registrationForm, {'attr': {'class': 'space-y-5'}}) }}
+                    
+                    <!-- Form Errors -->
+                    {% if form_errors(registrationForm) %}
+                        <div class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-500 dark:border-red-400 text-red-700 dark:text-red-300 p-4 rounded-lg">
+                            {{ form_errors(registrationForm) }}
+                        </div>
+                    {% endif %}
+
+                    <!-- Name Fields Row -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- First Name -->
+                        <div>
+                            {{ form_label(registrationForm.firstName, 'Nombre', {
+                                'label_attr': {'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2'}
+                            }) }}
+                            {{ form_widget(registrationForm.firstName, {
+                                'attr': {
+                                    'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all',
+                                    'placeholder': 'Juan'
+                                }
+                            }) }}
+                            {{ form_errors(registrationForm.firstName) }}
+                        </div>
+
+                        <!-- Last Name -->
+                        <div>
+                            {{ form_label(registrationForm.lastName, 'Apellidos', {
+                                'label_attr': {'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2'}
+                            }) }}
+                            {{ form_widget(registrationForm.lastName, {
+                                'attr': {
+                                    'class': 'w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all',
+                                    'placeholder': 'Pérez García'
+                                }
+                            }) }}
+                            {{ form_errors(registrationForm.lastName) }}
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        {{ form_label(registrationForm.email, null, {
+                            'label_attr': {'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2'}
+                        }) }}
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 dark:text-gray-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+                                </svg>
+                            </span>
+                            {{ form_widget(registrationForm.email, {
+                                'attr': {
+                                    'class': 'w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all',
+                                    'placeholder': 'tu@email.com'
+                                }
+                            }) }}
+                        </div>
+                        {{ form_errors(registrationForm.email) }}
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        {{ form_label(registrationForm.plainPassword, 'Contraseña', {
+                            'label_attr': {'class': 'block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2'}
+                        }) }}
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400 dark:text-gray-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </span>
+                            {{ form_widget(registrationForm.plainPassword, {
+                                'attr': {
+                                    'class': 'w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-400 focus:border-transparent transition-all',
+                                    'placeholder': '••••••••'
+                                }
+                            }) }}
+                        </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 flex items-start">
+                            <svg class="w-4 h-4 mr-1 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Mínimo 8 caracteres, una mayúscula, una minúscula y un número
+                        </p>
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+
+                    <!-- Terms and Conditions -->
+                    <div class="flex items-start pt-2">
+                        <div class="flex items-center h-5">
+                            {{ form_widget(registrationForm.agreeTerms, {
+                                'attr': {'class': 'w-4 h-4 text-purple-600 dark:text-purple-500 border-gray-300 dark:border-gray-600 rounded focus:ring-purple-500 dark:focus:ring-purple-400 bg-white dark:bg-gray-700'}
+                            }) }}
+                        </div>
+                        <div class="ml-3 text-sm">
+                            {{ form_label(registrationForm.agreeTerms, null, {
+                                'label_attr': {'class': 'text-gray-700 dark:text-gray-300'}
+                            }) }}
+                            {{ form_errors(registrationForm.agreeTerms) }}
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white px-6 py-3.5 rounded-lg font-bold text-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                            </svg>
+                            Crear Cuenta
+                        </button>
+                    </div>
+
+                {{ form_end(registrationForm) }}
+            </div>
+
+            <!-- Login Link -->
+            <div class="text-center mt-8">
+                <p class="text-gray-600 dark:text-gray-400">
+                    ¿Ya tienes cuenta? 
+                    <a href="{{ path('app_login') }}" class="text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-bold underline decoration-2 underline-offset-2">Inicia Sesión</a>
+                </p>
+            </div>
         </div>
     </div>
 {% endblock %}

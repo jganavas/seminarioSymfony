@@ -1,0 +1,29 @@
+{
+  "name": "seminariosymfony",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:css": "tailwindcss -i ./tailwind-source.css -o ./public/styles/output.css --minify",
+    "watch:css": "tailwindcss -i ./tailwind-source.css -o ./public/styles/output.css --watch",
+    "dev": "symfony server:start --no-tls --port=8000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jganavas/seminarioSymfony.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jganavas/seminarioSymfony/issues"
+  },
+  "homepage": "https://github.com/jganavas/seminarioSymfony#readme",
+  "devDependencies": {
+    "tailwindcss": "^4.1.18"
+  }
+}
