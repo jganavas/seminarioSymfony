@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "build:css": "tailwindcss -i ./tailwind-source.css -o ./public/styles/output.css --minify",
+    "build:css": "tailwindcss -i ./tailwind-source.css -o ./public/styles/output.css --config ./tailwind.config.cjs --minify",
     "watch:css": "tailwindcss -i ./tailwind-source.css -o ./public/styles/output.css --watch",
     "dev": "symfony server:start --no-tls --port=8000",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -5,7 +5,7 @@
 {% block body %}
     <div class="flex justify-between items-center mb-8 flex-wrap gap-4">
         <h1 class="text-4xl font-bold text-gray-800 dark:text-gray-100">Miauuu</h1>
-        <a href="{{ path('app_blog_new') }}" class="btn-primary">Create new</a>
+        <a href="{{ path('app_blog_new') }}" class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-md hover:shadow-lg">Crear Nuevo</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -13,13 +13,13 @@
             <article class="card bg-white dark:bg-gray-800 transition-colors duration-200">
                 <div class="flex justify-between items-center pb-4 border-b-2 border-gray-100 dark:border-gray-700">
                     <span class="bg-purple-500 dark:bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-semibold">#{{ post.id }}</span>
-                    <span class="text-gray-500 dark:text-gray-400 text-sm">{{ post.publishedAt ? post.publishedAt|date('Y-m-d') : 'Not published' }}</span>
+                    <span class="text-gray-500 dark:text-gray-400 text-sm">{{ post.publishedAt ? post.publishedAt|date('Y-m-d') : 'No publicado' }}</span>
                 </div>
                 <div class="flex-1 flex flex-col gap-2 my-4">
                     <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100">{{ post.title }}</h2>
                     <p class="text-purple-600 dark:text-purple-400 font-medium">{{ post.slug }}</p>
                     {% if post.author %}
-                        <p class="text-gray-600 dark:text-gray-400">By {{ post.author.fullName }}</p>
+                        <p class="text-gray-600 dark:text-gray-400">Por {{ post.author.fullName }}</p>
                     {% endif %}
                     {% if post.categories|length > 0 %}
                         <div class="flex flex-wrap gap-2">
@@ -36,14 +36,16 @@
                     {% endif %}
                 </div>
                 <div class="flex gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
-                    <a href="{{ path('app_blog_show', {'slug': post.slug}) }}" class="flex-1 text-center bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg font-medium hover:bg-purple-200 dark:hover:bg-purple-800 transition-all">Show</a>
-                    <a href="{{ path('app_blog_edit', {'id': post.id}) }}" class="flex-1 text-center bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg font-medium hover:bg-blue-200 dark:hover:bg-blue-800 transition-all">Edit</a>
+                    <a href="{{ path('app_blog_show', {'slug': post.slug}) }}" class="flex-1 text-center bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-4 py-2 rounded-lg font-medium hover:bg-purple-200 dark:hover:bg-purple-800 transition-all">Ver</a>
+                    {% if is_granted('POST_EDIT', post) %}
+                        <a href="{{ path('app_blog_edit', {'id': post.id}) }}" class="flex-1 text-center bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-4 py-2 rounded-lg font-medium hover:bg-blue-200 dark:hover:bg-blue-800 transition-all">Editar</a>
+                    {% endif %}
                 </div>
             </article>
         {% else %}
             <div class="col-span-full text-center py-16">
-                <p class="text-xl text-gray-500 dark:text-gray-400 mb-6">No records found</p>
-                <a href="{{ path('app_blog_new') }}" class="btn-primary">Create your first post</a>
+                <p class="text-xl text-gray-500 dark:text-gray-400 mb-6">No se encontraron registros</p>
+                <a href="{{ path('app_blog_new') }}" class="btn-primary">Crea tu primer post</a>
             </div>
         {% endfor %}
     </div>

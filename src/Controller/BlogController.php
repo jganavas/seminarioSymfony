@@ -30,12 +30,16 @@ final class BlogController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $post = new Post();
+        $post->setAuthor($this->getUser()); // Assign current user as author
+        
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($post);
             $entityManager->flush();
+
+            $this->addFlash('success', '¡Post creado exitosamente!');
 
             return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -49,10 +53,9 @@ final class BlogController extends AbstractController
     #[Route('/post/{slug}', name: 'app_blog_show', methods: ['GET'])]
     public function show(string $slug, PostRepository $postRepository): Response
     {
-
         $post = $postRepository->findOneBy(['slug' => $slug]);
         if(!$post) {
-            throw $this->createNotFoundException('The product does not exist');
+            throw $this->createNotFoundException('El post no existe');
         }
 
         return $this->render('blog/show.html.twig', [
@@ -63,11 +66,19 @@ final class BlogController extends AbstractController
     #[Route('/{id}/edit', name: 'app_blog_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        // Manual permission check for custom flash message
+        if (!$this->isGranted('POST_EDIT', $post)) {
+            $this->addFlash('error', 'No tienes permisos para editar este post.');
+            return $this->redirectToRoute('app_blog_index');
+        }
+
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+
+            $this->addFlash('success', '¡Post actualizado exitosamente!');
 
             return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -81,9 +92,18 @@ final class BlogController extends AbstractController
     #[Route('/{id}', name: 'app_blog_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
+        // Manual permission check for custom flash message
+        if (!$this->isGranted('POST_DELETE', $post)) {
+            $this->addFlash('error', 'No tienes permisos para eliminar este post.');
+            return $this->redirectToRoute('app_blog_index');
+        }
+
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($post);
             $entityManager->flush();
+            $this->addFlash('success', '¡Post eliminado exitosamente!');
+        } else {
+             $this->addFlash('error', 'Token de seguridad inválido.');
         }
 
         return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);

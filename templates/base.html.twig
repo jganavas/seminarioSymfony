@@ -6,6 +6,22 @@
         <title>{% block title %}Mi paginilla{% endblock %}</title>
         <link rel="icon" href="{{ asset('styles/img/estrella.png') }}">
         
+        {# Inline script to prevent FOUC and ensure Safari compatibility #}
+        <script>
+            (function() {
+                try {
+                    const savedTheme = localStorage.getItem('theme');
+                    // Only apply if explicitly set to 'dark', otherwise default to light
+                    if (savedTheme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    }
+                } catch (e) {
+                    // Safari can block localStorage in private mode
+                    console.warn('Could not access localStorage:', e);
+                }
+            })();
+        </script>
+        
         {% block stylesheets %}
             <link rel="stylesheet" href="{{ asset('styles/output.css') }}?v={{ 'now'|date('U') }}">
         {% endblock %}
@@ -18,42 +34,65 @@
             document.addEventListener('DOMContentLoaded', function() {
                 const hamburger = document.getElementById('hamburger');
                 const mobileMenu = document.getElementById('mobile-menu');
+                
+                // Verificar que ambos elementos existan antes de continuar
+                if (!hamburger || !mobileMenu) {
+                    console.warn('Hamburger menu elements not found');
+                    return;
+                }
+                
                 const menuItems = document.querySelectorAll('.mobile-menu-item');
                 const lines = hamburger.querySelectorAll('.hamburger-line');
                 
                 let isOpen = false;
+                let isToggling = false; // Prevenir toggles múltiples simultáneos
                 
                 function toggleMenu() {
+                    if (isToggling) return; // Si ya estamos haciendo toggle, salir
+                    isToggling = true;
+                    
                     isOpen = !isOpen;
                     
                     // Animar icono hamburguesa a X
                     if (isOpen) {
-                        lines[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                        lines[1].style.opacity = '0';
-                        lines[2].style.transform = 'rotate(-45deg) translate(6px, -6px)';
+                        lines[0].classList.add('-rotate-45', 'translate-y-2');
+                        lines[1].classList.add('opacity-0');
+                        lines[2].classList.add('rotate-45', '-translate-y-2');
                         
                         // Mostrar menú con animación
                         mobileMenu.classList.remove('hidden');
+                        // Forzar reflow
+                        void mobileMenu.offsetWidth;
+                        mobileMenu.classList.add('max-h-screen', 'opacity-100');
+                        
                         setTimeout(() => {
                             menuItems.forEach((item, index) => {
-                                item.style.opacity = '1';
-                                item.style.transform = 'translateX(0)';
+                                item.style.transitionDelay = `${index * 50}ms`;
+                                item.classList.remove('opacity-0', '-translate-x-4');
                             });
                         }, 10);
                     } else {
-                        lines[0].style.transform = '';
-                        lines[1].style.opacity = '1';
-                        lines[2].style.transform = '';
+                        lines[0].classList.remove('-rotate-45', 'translate-y-2');
+                        lines[1].classList.remove('opacity-0');
+                        lines[2].classList.remove('rotate-45', '-translate-y-2');
                         
                         // Ocultar menú con animación
-                        menuItems.forEach(item => {
-                            item.style.opacity = '0';
-                            item.style.transform = 'translateX(-20px)';
+                        menuItems.forEach((item, index) => {
+                             item.style.transitionDelay = '0ms';
+                             item.classList.add('opacity-0', '-translate-x-4');
                         });
+                        
+                        mobileMenu.classList.remove('max-h-screen', 'opacity-100');
+                        
                         setTimeout(() => {
                             mobileMenu.classList.add('hidden');
                         }, 300);
                     }
+                    
+                    // Resetear flag después de un pequeño delay
+                    setTimeout(() => {
+                        isToggling = false;
+                    }, 300);
                 }
                 
                 function closeMenu() {
@@ -62,34 +101,32 @@
                     }
                 }
                 
-                if (hamburger && mobileMenu) {
-                    // Inicializar estado de items del menú
-                    menuItems.forEach(item => {
-                        item.style.opacity = '0';
-                        item.style.transform = 'translateX(-20px)';
+                // Inicializar estado de items del menú
+                menuItems.forEach(item => {
+                    item.classList.add('opacity-0', '-translate-x-4', 'transition-all', 'duration-300');
+                });
+                
+                // Usar capture phase para interceptar el click antes que otros handlers
+                hamburger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleMenu();
+                }, true); // true = use capture phase
+                
+                // Cerrar al hacer clic en un enlace
+                const navLinks = mobileMenu.querySelectorAll('a');
+                navLinks.forEach(function(link) {
+                    link.addEventListener('click', function() {
+                        closeMenu();
                     });
-                    
-                    hamburger.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleMenu();
-                    });
-                    
-                    // Cerrar al hacer clic en un enlace
-                    const navLinks = mobileMenu.querySelectorAll('a');
-                    navLinks.forEach(function(link) {
-                        link.addEventListener('click', function() {
-                            closeMenu();
-                        });
-                    });
-                    
-                    // Cerrar al hacer clic fuera
-                    document.addEventListener('click', function(e) {
-                        if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-                            closeMenu();
-                        }
-                    });
-                }
+                });
+                
+                // Cerrar al hacer clic fuera
+                document.addEventListener('click', function(e) {
+                    if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
+                        closeMenu();
+                    }
+                });
             });
         </script>
     </head>
@@ -109,21 +146,31 @@
                                 <li><a href="{{ path('app_home') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Inicio</a></li>
                                 <li><a href="{{ path('app_blog_new') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Nuevo Post</a></li>
                                 <li><a href="{{ path('app_category_index') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Categorías</a></li>
+                                {% if app.user %}
+                                    <li><a href="{{ path('app_profile') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Mi Perfil</a></li>
+                                {% endif %}
                                 <li><a href="{{ path('app_about') }}" class="text-gray-700 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-colors">Acerca de</a></li>
                                 <li>
                                     <button 
                                         data-controller="theme"
                                         data-action="click->theme#toggle"
-                                        class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                                        class="relative w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300 flex items-center justify-center overflow-hidden"
                                         title="Cambiar tema"
                                         aria-label="Cambiar tema"
                                     >
-                                        <span data-theme-target="icon">🌙</span>
+                                        <!-- Sun Icon -->
+                                        <svg data-theme-target="lightIcon" class="w-5 h-5 absolute transition-all duration-500 rotate-0 scale-100 opacity-100 dark:-rotate-90 dark:scale-0 dark:opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                        <!-- Moon Icon -->
+                                        <svg data-theme-target="darkIcon" class="w-5 h-5 absolute transition-all duration-500 rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                        </svg>
                                     </button>
                                 </li>
                                 {% if app.user %}
                                     <li class="ml-4 pl-4 border-l border-gray-300 dark:border-gray-600">
-                                        <span class="text-gray-600 dark:text-gray-400 text-sm mr-3">🐱 {{ app.user.firstName }}</span>
+                                        <span class="text-gray-700 dark:text-gray-300 font-medium mr-3">🐱 {{ app.user.firstName }}</span>
                                         <a href="{{ path('app_logout') }}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors inline-flex items-center">
                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -147,34 +194,44 @@
                         <button 
                             data-controller="theme"
                             data-action="click->theme#toggle"
-                            class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all"
+                            class="relative w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300 flex items-center justify-center overflow-hidden"
                             title="Cambiar tema"
                             aria-label="Cambiar tema"
                         >
-                            <span data-theme-target="icon">🌙</span>
+                            <!-- Sun Icon -->
+                            <svg data-theme-target="lightIcon" class="w-5 h-5 absolute transition-all duration-500 rotate-0 scale-100 opacity-100 dark:-rotate-90 dark:scale-0 dark:opacity-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                            <!-- Moon Icon -->
+                            <svg data-theme-target="darkIcon" class="w-5 h-5 absolute transition-all duration-500 rotate-90 scale-0 opacity-0 dark:rotate-0 dark:scale-100 dark:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
                         </button>
                         
                         <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all" id="hamburger" aria-label="Toggle menu">
                             <div class="w-6 h-5 relative flex flex-col justify-between">
+                                <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out transform origin-center"></span>
                                 <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out"></span>
-                                <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out"></span>
-                                <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out"></span>
+                                <span class="hamburger-line block w-full h-0.5 bg-gray-800 dark:bg-gray-200 transition-all duration-300 ease-in-out transform origin-center"></span>
                             </div>
                         </button>
                     </div>
                 </div>
                 <!-- Mobile menu -->
-                <div class="hidden overflow-hidden transition-all duration-300 ease-in-out" id="mobile-menu">
+                <div class="hidden max-h-0 opacity-0 overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out" id="mobile-menu">
                     <ul class="py-4 space-y-1 border-t border-gray-200 dark:border-gray-700 mt-2">
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 50ms"><a href="{{ path('app_home') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Inicio</a></li>
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 100ms"><a href="{{ path('app_blog_new') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Nuevo Post</a></li>
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 150ms"><a href="{{ path('app_category_index') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Categorías</a></li>
-                        <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 200ms"><a href="{{ path('app_about') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Acerca de</a></li>
+                        <li class="mobile-menu-item"><a href="{{ path('app_home') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Inicio</a></li>
+                        <li class="mobile-menu-item"><a href="{{ path('app_blog_new') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Nuevo Post</a></li>
+                        <li class="mobile-menu-item"><a href="{{ path('app_category_index') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Categorías</a></li>
                         {% if app.user %}
-                            <li class="mobile-menu-item transform transition-all duration-300 pt-2 mt-2 border-t border-gray-200" style="transition-delay: 250ms">
+                            <li class="mobile-menu-item"><a href="{{ path('app_profile') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Mi Perfil</a></li>
+                        {% endif %}
+                        <li class="mobile-menu-item"><a href="{{ path('app_about') }}" class="block py-3 px-4 text-gray-700 dark:text-gray-300 hover:bg-purple-50 dark:hover:bg-gray-700 hover:text-purple-600 dark:hover:text-purple-400 font-medium transition-all rounded-lg">Acerca de</a></li>
+                        {% if app.user %}
+                            <li class="mobile-menu-item pt-2 mt-2 border-t border-gray-200">
                                 <div class="px-4 py-2 text-gray-600 text-sm">🐱 {{ app.user.fullName }}</div>
                             </li>
-                            <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 300ms">
+                            <li class="mobile-menu-item">
                                 <a href="{{ path('app_logout') }}" class="block py-3 px-4 text-red-600 hover:bg-red-50 font-medium transition-all rounded-lg">
                                     <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
@@ -183,10 +240,10 @@
                                 </a>
                             </li>
                         {% else %}
-                            <li class="mobile-menu-item transform transition-all duration-300 pt-2 mt-2 border-t border-gray-200" style="transition-delay: 250ms">
+                            <li class="mobile-menu-item pt-2 mt-2 border-t border-gray-200">
                                 <a href="{{ path('app_login') }}" class="block py-3 px-4 text-purple-600 hover:bg-purple-50 font-medium transition-all rounded-lg">Iniciar Sesión</a>
                             </li>
-                            <li class="mobile-menu-item transform transition-all duration-300" style="transition-delay: 300ms">
+                            <li class="mobile-menu-item">
                                 <a href="{{ path('app_register') }}" class="block py-3 px-4 bg-purple-600 text-white hover:bg-purple-700 font-medium transition-all rounded-lg text-center">Registrarse</a>
                             </li>
                         {% endif %}
@@ -196,9 +253,48 @@
         </header>
 
         <main class="flex-grow container mx-auto px-4 py-8">
-            {% block body %}
-                
-            {% endblock %}
+
+                {# Global Flash Messages #}
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="mb-6 rounded-lg p-4 flex items-center shadow-md
+                            {% if label == 'success' %}
+                                bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-200 border-l-4 border-green-500
+                            {% elseif label == 'error' or label == 'danger' %}
+                                bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-200 border-l-4 border-red-500
+                            {% else %}
+                                bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 border-l-4 border-blue-500
+                            {% endif %}
+                        " role="alert">
+                            <div class="mr-3">
+                                {% if label == 'success' %}
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                {% elseif label == 'error' or label == 'danger' %}
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                {% else %}
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                {% endif %}
+                            </div>
+                            <div class="flex-1">
+                                {{ message }}
+                            </div>
+                            <button type="button" class="ml-auto -mx-1.5 -my-1.5 rounded-lg p-1.5 inline-flex h-8 w-8 hover:bg-opacity-20 hover:bg-black dark:hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-gray-600" data-dismiss-target="#alert-1" aria-label="Close" onclick="this.parentElement.remove()">
+                                <span class="hidden">Cerrar</span>
+                                <svg class="w-5 h-5 block" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+            {% block body %}{% endblock %}
         </main>
 
         <footer class="bg-gray-800 dark:bg-gray-950 text-white mt-auto transition-colors duration-200">

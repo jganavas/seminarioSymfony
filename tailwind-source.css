@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@config "./tailwind.config.cjs";
 
 /* =================================================================
    VARIABLES CSS PERSONALIZADAS PARA TEMAS
@@ -35,10 +36,10 @@ html.dark {
    FONDOS - MODO OSCURO
    ================================================================= */
 
-html.dark body,
+/* html.dark body,
 html.dark .bg-gray-50 {
     background-color: rgb(var(--color-bg-primary));
-}
+} */
 
 /* Excepción: Los botones del hero mantienen su color original */
 html.dark .bg-white:not(.bg-white[href*="blog"]) {
@@ -234,4 +235,3 @@ button {
 .btn-hero-light:hover {
     background-color: #f3f4f6 !important; /* gray-100 */
 }
-
